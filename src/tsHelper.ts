@@ -10,13 +10,17 @@ export function getImportsForFile(file: string, srcRoot: string) {
   file = fs.realpathSync(file)
 
   if (fs.lstatSync(file).isDirectory()) {
-    const index = path.join(file, "index.ts")
-    if (fs.existsSync(index)) {
-      // https://basarat.gitbooks.io/typescript/docs/tips/barrel.html
-      console.warn(`Warning: Barrel import: ${path.relative(srcRoot, file)}`)
-      file = index
+    if(!file.includes('node_modules')) {
+      const index = path.join(file, "index.ts")
+      if (fs.existsSync(index)) {
+        // https://basarat.gitbooks.io/typescript/docs/tips/barrel.html
+        console.warn(`Warning: Barrel import: ${path.relative(srcRoot, file)}`)
+        file = index
+      } else {
+        throw new Error(`Warning: Importing a directory without an index.ts file: ${path.relative(srcRoot, file)}`)
+      }
     } else {
-      throw new Error(`Warning: Importing a directory without an index.ts file: ${path.relative(srcRoot, file)}`)
+      return;
     }
   }
 
@@ -63,8 +67,13 @@ export class ImportTracker {
     if (this.imports.has(file)) {
       return this.imports.get(file)
     }
-    const imports = getImportsForFile(file, this.srcRoot)
-    this.imports.set(file, imports)
+
+    let imports = [];
+    if(!file.includes('node_modules')) {
+      imports = getImportsForFile(file, this.srcRoot)
+      this.imports.set(file, imports)
+    }
+
     return imports
   }
 }

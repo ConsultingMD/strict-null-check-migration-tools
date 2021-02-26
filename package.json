@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Scripts used to migrate Figma's codebase to strictNullChecks",
   "scripts": {
-    "find-candidates": "tsc && node src/findCandidates.js",
+    "find-candidates": "tsc && node --trace-warnings src/findCandidates.js",
     "auto-add": "tsc && node src/autoAdd.js",
     "find-cycles": "tsc && node src/runFindCycles.js",
     "visualize": "tsc && node src/visualize.js"
