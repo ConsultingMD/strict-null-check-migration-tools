@@ -19,8 +19,6 @@ export function getImportsForFile(file: string, srcRoot: string) {
       } else {
         throw new Error(`Warning: Importing a directory without an index.ts file: ${path.relative(srcRoot, file)}`)
       }
-    } else {
-      return;
     }
   }
 

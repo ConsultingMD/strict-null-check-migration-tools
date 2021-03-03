@@ -29,8 +29,6 @@ async function findCandidates() {
   for (const file of await forEachFileInSrc(srcRoot)) {
     if(!file.includes('node_modules')) {
       fileToImports.set(file, getImportsForFile(file, srcRoot));
-    } else {
-      console.log(file)
     }
   }
 
